@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +32,7 @@ public class TaskController {
 	@GetMapping("/task/{id}")
 	public Task one(@PathVariable Long id) {
 		Task task = taskRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Could not find Task with id:" + id));
+			.orElseThrow(() -> new RuntimeException("Could not find Task with id: " + id));
 
 		return task;
 	}
@@ -42,6 +43,17 @@ public class TaskController {
 		taskRepository.save(task);
 
 		return task;
+	}
+
+	@PutMapping("/task/{id}")
+	public void putTaks(@RequestBody Task updatedTask, @PathVariable Long id) {
+		Task task = taskRepository.findById(id)
+			.orElseThrow(() -> new RuntimeException("Could not find Task with id: " + id));
+
+		task.setContent(updatedTask.getContent());
+		task.setIsDone(updatedTask.getIsDone());
+
+		taskRepository.save(task);
 	}
 
 	@DeleteMapping("/task/{id}")
