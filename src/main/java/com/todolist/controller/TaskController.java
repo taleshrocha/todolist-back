@@ -3,8 +3,9 @@ package com.todolist.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dao.TaskRepository;
@@ -34,5 +35,12 @@ public class TaskController {
 		return task;
 	}
 
-	
+	@PostMapping("/task")
+	public Task newTask(@RequestBody Task newTask) {
+		Task task = new Task(newTask.getContent(), newTask.getIsDone());
+		taskRepository.save(task);
+
+		return task;
+	}
+
 }

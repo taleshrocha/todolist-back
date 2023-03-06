@@ -29,7 +29,7 @@ public class Task {
 		return content;
 	}
 
-	public boolean idDone() {
+	public boolean getIsDone() {
 		return isDone;
 	}
 
