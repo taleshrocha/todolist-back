@@ -37,9 +37,17 @@ public class TaskController {
 		return task;
 	}
 
-	@PostMapping("/task")
-	public Task newTask(@RequestBody Task newTask) {
-		Task task = new Task(newTask.getContent(), newTask.getIsDone());
+	@GetMapping("/task/parent/{parentTaskId}")
+	public List<Task> allOf(@PathVariable Long parentTaskId) {
+		List<Task> tasks = taskRepository.findByParentTaskId(parentTaskId);
+
+		return tasks;
+	}
+
+
+	@PostMapping("/task/{parentId}")
+	public Task newTask(@RequestBody Task newTask, @PathVariable Long parentId) {
+		Task task = new Task(newTask.getContent(), newTask.getIsDone(), parentId);
 		taskRepository.save(task);
 
 		return task;
@@ -56,6 +64,7 @@ public class TaskController {
 		taskRepository.save(task);
 	}
 
+	// TODO: delete all children
 	@DeleteMapping("/task/{id}")
 	public void deleteTask(@PathVariable Long id) {
 		taskRepository.deleteById(id);

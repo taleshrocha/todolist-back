@@ -11,12 +11,14 @@ public class Task {
 	private @Id @GeneratedValue Long id;
 	private String content;
 	private boolean isDone;
+	private Long parentTaskId;
 
 	public Task() {}
 
-	public Task(String content, boolean isDone) {
+	public Task(String content, boolean isDone, Long parentTaskId) {
 		this.content = content;
 		this.isDone = isDone;
+		this.parentTaskId = parentTaskId;
 	}
 
 	// ### Gets and Setters ###
@@ -33,6 +35,10 @@ public class Task {
 		return isDone;
 	}
 
+	public Long getParentTaskId() {
+		return parentTaskId;
+	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
@@ -41,10 +47,15 @@ public class Task {
 		this.isDone = isDone;
 	}
 
+	public void setParentTaskId(Long parentTaskId) {
+		this.parentTaskId = parentTaskId;
+	}
+
 	// ### Methods ###
 
 
 	// ### Overrides ###
+	// TODO: add parentTaskId
 
 	@Override
 	public boolean equals(Object o) {

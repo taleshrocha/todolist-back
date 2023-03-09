@@ -16,10 +16,17 @@ class LoadDatabase {
 	CommandLineRunner initDatabase(TaskRepository taskRepository) {
 
 		return args -> {
-			taskRepository.save(new Task("Clean House", true));
-			taskRepository.save(new Task("Study", true));
-			taskRepository.save(new Task("Program", false));
-			taskRepository.findAll().forEach(news -> log.info("PRELOADED:\n" + news ));
+			Task root = new Task("ROOT", true, null);
+			taskRepository.save(root);
+			Task clean = new Task("Clean House", true, root.getId());
+			taskRepository.save(clean);
+			taskRepository.save(new Task("Wash floor", false, clean.getId()));
+			taskRepository.save(new Task("Wash dishes", true, clean.getId()));
+			Task study = new Task("Study", true, root.getId());
+			taskRepository.save(study);
+			taskRepository.save(new Task("LPCP", false, study.getId()));
+			taskRepository.save(new Task("Program", false, root.getId()));
+			taskRepository.findAll().forEach(news -> log.info("PRELOADED:\n" + news));
 
 		};
 	}
