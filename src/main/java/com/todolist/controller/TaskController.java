@@ -44,15 +44,6 @@ public class TaskController {
 		return tasks;
 	}
 
-
-	@PostMapping("/task/{parentId}")
-	public Task newTask(@RequestBody Task newTask, @PathVariable Long parentId) {
-		Task task = new Task(newTask.getContent(), newTask.getIsDone(), parentId);
-		taskRepository.save(task);
-
-		return task;
-	}
-
 	@PutMapping("/task/{id}")
 	public void putTaks(@RequestBody Task updatedTask, @PathVariable Long id) {
 		Task task = taskRepository.findById(id)
