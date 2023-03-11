@@ -37,12 +37,12 @@ public class TaskController {
 		return task;
 	}
 
-	@GetMapping("/task/parent/{parentTaskId}")
-	public List<Task> allOf(@PathVariable Long parentTaskId) {
-		List<Task> tasks = taskRepository.findByParentTaskId(parentTaskId);
-
-		return tasks;
-	}
+//	@GetMapping("/task/parent/{parentTaskId}")
+//	public List<Task> allOf(@PathVariable Long parentTaskId) {
+//		List<Task> tasks = taskRepository.findByParentTaskId(parentTaskId);
+//
+//		return tasks;
+//	}
 
 	@PutMapping("/task/{id}")
 	public void putTaks(@RequestBody Task updatedTask, @PathVariable Long id) {

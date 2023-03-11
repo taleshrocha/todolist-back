@@ -1,5 +1,7 @@
 package com.todolist.dao;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,18 +18,20 @@ class LoadDatabase {
 	CommandLineRunner initDatabase(TaskRepository taskRepository) {
 
 		return args -> {
-			Task root = new Task("ROOT", true, null);
+			Task root = new Task("ROOT", true);
+			Task clean = new Task("Clean House", false);
+			Task floor = new Task("Clean floor", true);
 			taskRepository.save(root);
-			Task clean = new Task("Clean House", true, root.getId());
 			taskRepository.save(clean);
-			taskRepository.save(new Task("Wash floor", false, clean.getId()));
-			taskRepository.save(new Task("Wash dishes", true, clean.getId()));
-			Task study = new Task("Study", true, root.getId());
-			taskRepository.save(study);
-			taskRepository.save(new Task("LPCP", false, study.getId()));
-			taskRepository.save(new Task("Program", false, root.getId()));
-			taskRepository.findAll().forEach(news -> log.info("PRELOADED:\n" + news));
+			taskRepository.save(floor);
 
+			root.addChildren(clean);
+			taskRepository.save(root);
+
+			clean.addChildren(floor);
+			taskRepository.save(clean);
+
+			taskRepository.findAll().forEach(task -> log.info("PRELOADED:\n" + task));
 		};
 	}
 }
