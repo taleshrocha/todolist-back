@@ -22,33 +22,45 @@ public class TaskController {
 		this.taskRepository = taskRepository;
 	}
 
+	@GetMapping("/task/all")
+	public List<Task> all() {
+		List<Task> tasks = taskRepository.findAll();
+
+		return tasks;
+	}
+
 	@GetMapping("/task")
 	public Task getRoot() {
 		Task task = taskRepository.findById(1L)
-			.orElseThrow(() -> new RuntimeException("Could not Find Root."));
+				.orElseThrow(() -> new RuntimeException("Could not Find Root."));
 
 		return task;
 	}
 
-	@PostMapping("/task/{parentId}") 
-	public void postTask(@RequestBody Task newTask, @PathVariable Long parentId){
+	@PostMapping("/task/{parentId}")
+	public void postTask(@RequestBody Task newTask, @PathVariable Long parentId) {
 		Task task = new Task();
 
 		Task parentTask = taskRepository.findById(parentId)
-			.orElseThrow(() -> new RuntimeException("Could not Find Task With Id: " + parentId));
+				.orElseThrow(() -> new RuntimeException("Could not Find Task With Id: " + parentId));
 
 		task.setContent(newTask.getContent());
 		task.setIsDone(newTask.getIsDone());
 		taskRepository.save(task);
 
-		parentTask.addChildren(task);
 		taskRepository.save(parentTask);
+	}
+
+	@PostMapping("/task/root")
+	public void postTask() {
+		Task root = new Task("ROOT", true);
+		taskRepository.save(root);
 	}
 
 	@PutMapping("/task/{id}")
 	public void putTaks(@RequestBody Task updatedTask, @PathVariable Long id) {
 		Task task = taskRepository.findById(id)
-			.orElseThrow(() -> new RuntimeException("Could not find Task with id: " + id));
+				.orElseThrow(() -> new RuntimeException("Could not find Task with id: " + id));
 
 		task.setContent(updatedTask.getContent());
 		task.setIsDone(updatedTask.getIsDone());
@@ -56,9 +68,9 @@ public class TaskController {
 		taskRepository.save(task);
 	}
 
-	// TODO: delete all children
 	@DeleteMapping("/task/{id}")
 	public void deleteTask(@PathVariable Long id) {
 		taskRepository.deleteById(id);
 	}
+
 }
