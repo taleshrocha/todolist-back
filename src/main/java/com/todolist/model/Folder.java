@@ -1,5 +1,6 @@
 package com.todolist.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -26,7 +27,16 @@ public class Folder {
 	@OneToMany
 	private List<Task> tasks;
 
-	void addTask(Task task){
+	public Folder(String name) {
+		this.name = name;
+		this.tasks = new ArrayList<>();
+	}
+
+	public void addTask(Task task){
 		tasks.add(task);
+	}
+
+	public void removeTask(Task task){
+		tasks.remove(task);
 	}
 }

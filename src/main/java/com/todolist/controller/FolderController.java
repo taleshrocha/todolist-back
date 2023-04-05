@@ -11,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dao.FolderRepository;
+import com.todolist.dao.TaskRepository;
 import com.todolist.model.Folder;
+import com.todolist.model.Task;
 
 @RestController
 public class FolderController {
 
 	private final FolderRepository folderRepository;
+	private final TaskRepository taskRepository;
 
-	FolderController(FolderRepository folderRepository) {
+	FolderController(FolderRepository folderRepository, TaskRepository taskRepository) {
 		this.folderRepository = folderRepository;
+		this.taskRepository = taskRepository;
 	}
 
 	@GetMapping("/folder")
@@ -38,11 +42,23 @@ public class FolderController {
 	}
 
 	@PutMapping("/folder/{id}")
-	public void putTaks(@RequestBody Folder updatedFolder, @PathVariable Long id) {
+	public void putFolder(@RequestBody Folder updatedFolder, @PathVariable Long id) {
 		Folder folder = folderRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Could not find Folder with id: " + id));
 
 		folder.setName(updatedFolder.getName());
+
+		folderRepository.save(folder);
+	}
+
+@PutMapping("/folder/{id}/task")
+	public void putTask(@RequestBody Task newTask, @PathVariable Long id) {
+		Folder folder = folderRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Could not find Folder with id: " + id));
+
+		taskRepository.save(newTask);
+
+		folder.addTask(newTask);
 
 		folderRepository.save(folder);
 	}
