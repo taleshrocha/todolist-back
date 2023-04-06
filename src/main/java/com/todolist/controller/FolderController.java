@@ -67,4 +67,16 @@ public class FolderController {
 	public void deleteFolder(@PathVariable Long id) {
 		folderRepository.deleteById(id);
 	}
+
+	@DeleteMapping("/folder/{folderId}/task/{taskId}")
+	public void deleteTask(@PathVariable Long folderId, @PathVariable Long taskId) {
+		Folder folder = folderRepository.findById(folderId)
+				.orElseThrow(() -> new RuntimeException("Could not find Folder with id: " + folderId));
+		Task task = taskRepository.findById(taskId)
+				.orElseThrow(() -> new RuntimeException("Could not find Task with id: " + taskId));
+
+		folder.removeTask(task);
+
+		taskRepository.deleteById(taskId);
+	}
 }
